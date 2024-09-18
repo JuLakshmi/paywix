@@ -1,0 +1,20 @@
+{
+    "postgres": {
+        "host": "localhost",
+        "database": "prod21aug",
+        "user": "postgres",
+        "password": ""
+    },
+    "google_sheets": {
+        "spreadsheet_id": "1C5sNC1B0VlUsopYMFDJfc0o833a2Ow0D3PGT_pu5_J4",
+        "sheet_name": "06-09-2024|21:23"
+    },
+    "service_account": {
+        "credentials_file": "credentials.json"
+    },
+    "db_views": {
+        "materialized_view_name": "analytics.homework_details_materialized_view",
+        "view_name": "analytics.homework_details_view"
+    }
+
+}
