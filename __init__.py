@@ -1,1 +1,0 @@
-print("PAYWIX LOADED SUCCEFULY")
