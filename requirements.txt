@@ -1,2 +1,5 @@
-
-
+psycopg2>=2.9.6
+google-auth>=2.21.0
+google-auth-oauthlib>=1.0.0
+google-api-python-client>=2.96.0
+pandas>=2.0.3

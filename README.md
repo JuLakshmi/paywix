@@ -1,47 +1,97 @@
-![Logo](https://user-images.githubusercontent.com/8171465/89018959-393bb680-d33a-11ea-86ee-2055b574f23e.png)
+This code syncs data between PostgreSQL and Google Sheets, allowing for automatic updates and management of materialized views within a PostgreSQL database. 
 
+## Prerequisites
 
-# PAYWIX
+1. **Python**: Ensure you have Python 3.x installed.
+2. **PostgreSQL**: Install PostgreSQL and have it running.
+3. **Google Sheets API**: Set up Google Sheets API access with proper credentials.
 
-[![DeepSource](https://static.deepsource.io/deepsource-badge-light-mini.svg)](https://deepsource.io/gh/renjithsraj/paywix/?ref=repository-badge)
+## Setup
 
-Paywix is a lightweight SDK for payment processing for the python based applications, the package was initially supported only with the Django framework. In the new version, the package is supported by all python-based applications.
+1. Install required dependencies:
+    ```bash
+    make setup
+    ```
 
-### Currently supported Payment Gateways
+2. Place your `credentials.json` file for Google Sheets API in the project root directory (or specify its location in the config).
 
-- Payu
-- Paytm
-- Cashfree
+## Configuration
 
-### Example Projects
-  - [Payu Demo Django 3.1.6](https://github.com/renjithsraj/paywix_demos/tree/master/paywix_demo_3_1_6)
-  - [Paytm Demo Django 3.1.6](https://github.com/renjithsraj/paywix_demos/tree/master/paywix_demo_3_1_6)
-  
-### Installation
-* Python > 3 Version
+The configuration is stored in `config.json`. Below is a description of the configuration fields.
 
-```python
-1. pip install paywix
-2. pipenv install paywix
+### `config.json`
+
+```json
+{
+    "postgres": {
+        "host": "localhost",
+        "database": "prod21aug",
+        "user": "postgres",
+        "password": ""
+    },
+    "google_sheets": {
+        "spreadsheet_id": "1C5sNC1B0VlUsopYMFDJfc0o833a2Ow0D3PGT_pu5_J4",
+        "sheet_name": "06-09-2024|21:23"
+    },
+    "service_account": {
+        "credentials_file": "credentials.json"
+    },
+    "db_views": {
+        "materialized_view_name": "analytics.homework_details_materialized_view",
+        "view_name": "analytics.homework_details_view"
+    }
+}
 ```
 
-### Plugins
+#### Sections:
 
-Paywix is currently extended with the following plugins. Instructions on how to use them in your own application are detailed below.
+1. **`postgres`: PostgreSQL Connection Details**
+   - **`host`**: The hostname where PostgreSQL is running.
+   - **`database`**: The name of the database to connect to.
+   - **`user`**: PostgreSQL username.
+   - **`password`**: Password for authentication.
 
-| Plugin | README |
-| ------ | ------ |
-| PAYU | https://github.com/renjithsraj/paywix/blob/master/PAYU.md|
-| PAYTM | https://github.com/renjithsraj/paywix/blob/master/PAYTM.md|
+2. **`google_sheets`: Google Sheets Configuration**
+   - **`spreadsheet_id`**: The ID of the Google Sheet you want to update.
+   - **`sheet_name`**: The specific sheet within the spreadsheet to update.
+   > **Note**: Change these values to match the correct Spreadsheet ID and sheet name.
 
-### Todos
- - Cashfree
- - Stripe
- - Braintree
- - CCavenue
+3. **`service_account`: Google Service Account Credentials**
+   - **`credentials_file`**: Path to your `credentials.json` file for authenticating the Google Sheets API.
+   > **Note**: Ensure that this file is placed in the project root or provide the full path to the file.
 
-License
-----
+4. **`db_views`: PostgreSQL View and Materialized View Details**
+   - **`materialized_view_name`**: The name of the materialized view in your PostgreSQL database.
+   - **`view_name`**: The name of the standard view in your database.
+   > **Note**: Ensure that the names correspond to the actual view names in your PostgreSQL database, including the schema name (e.g., `analytics.homework_details_materialized_view`).
 
-MIT
+## Makefile Commands
 
+- **`update-materialized-view`**:  
+  This command updates the materialized view in the PostgreSQL database.
+    ```bash
+    make update-materialized-view
+    ```
+
+- **`execute-view-update-sheet`**:  
+  This command runs the given view from config file and updates the Google Sheet with the corresponding data.
+    ```bash
+    make execute-view-update-sheet
+    ```
+
+- **`update-sheet-and-materialized-view`**:  
+  This command updates the Google Sheet first, by using that sheet name refreshes the materialized view in PostgreSQL.
+    ```bash
+    make update-sheet-and-materialized-view
+    ```
+
+## Usage
+
+1. Ensure PostgreSQL is running and accessible.
+2. Update the configuration in `config.json` with the correct details.
+3. Use the provided Makefile commands to run the desired operations.
+
+## Notes
+
+- Ensure that the Google service account has access to the specified Google Sheet.
+- Make sure that the PostgreSQL user has the necessary permissions to create and update views.
